@@ -63,7 +63,7 @@ const ButtonPanel: React.FC<IButtonPanelProps> = (props) => {
             />
             <Button
                 className="operation-button"
-                text="÷"
+                text="/"
                 onClick={() => onOperator(OperatorEnum.division)}
             />
 

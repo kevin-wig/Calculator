@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 
-import './style.scss';
 import DisplayPanel from '../../components/DisplayPanel';
 import ButtonPanel from '../../components/ButtonPanel';
-import { correctExpression, isUndefinedOrNullOrEmpty, trigOperators } from '../../shared/utils';
+import {
+    correctExpression,
+    genProperExp,
+    isUndefinedOrNullOrEmpty,
+    isValidExpression,
+    TrigOperators,
+} from '../../shared/utils';
 import { OperatorEnum } from '../../shared/enums/operatorEnum';
 
-interface IDashboardProps {}
+import './style.scss';
 
-const Dashboard: React.FC<IDashboardProps> = () => {
+const Dashboard: React.FC = () => {
     const [curDisplay, setCurDisplay] = useState<string>('0');
     const [curOperator, setCurOperator] = useState<OperatorEnum>();
     const [result, setResult] = useState<number>(0);
@@ -16,6 +21,27 @@ const Dashboard: React.FC<IDashboardProps> = () => {
     const [expression, setExpression] = useState<string>('');
     const [message, setMessage] = useState<string>('');
     const [newExp, setNewExp] = useState(false);
+
+    const showMessage = (msg: string) => {
+        setMessage(msg);
+        setTimeout(setMessage, 8000);
+    };
+
+    const getResult = () => {
+        const validationMessage = isValidExpression(expression);
+
+        if (
+            isUndefinedOrNullOrEmpty(validationMessage)
+            && !isUndefinedOrNullOrEmpty(expression)
+        ) {
+            setMessage('');
+            return true;
+        } else if (validationMessage) {
+            showMessage(validationMessage);
+        }
+
+        return false;
+    };
 
     const handleDigit = (digit: number) => {
         let curDisplayValue = curDisplay;
@@ -26,12 +52,10 @@ const Dashboard: React.FC<IDashboardProps> = () => {
 
         if (newExp) {
             setNewExp(false);
-            setExpression('');
+            setExpression(digit.toString());
         } else {
-            // const operator = trigOperators.includes(curOperator || '') ? `${curOperator}(` : curOperator;
-            console.log(expression);
             setExpression(correctExpression(
-                `${isUndefinedOrNullOrEmpty(digit) ? expression : `${expression}${digit}`}`,
+                `${isUndefinedOrNullOrEmpty(digit.toString()) ? expression : `${expression}${digit}`}`,
             ));
         }
         if (waitingForNewValue) {
@@ -47,12 +71,21 @@ const Dashboard: React.FC<IDashboardProps> = () => {
 
         setCurDisplay(curDisplayValue);
     };
+
     const handleParenthesis = (symbol: '(' | ')') => {
-        if (newExp) return;
+        if (newExp) {
+            if (symbol === '(') {
+                setNewExp(false);
+                setExpression(symbol);
+            }
+
+            return;
+        }
 
         if (!isUndefinedOrNullOrEmpty(expression)) {
-            console.log(correctExpression(`${expression}${symbol}`));
             setExpression(correctExpression(`${expression}${symbol}`));
+            setResult(0);
+            setWaitingForNewValue(true);
         }
     };
 
@@ -61,22 +94,28 @@ const Dashboard: React.FC<IDashboardProps> = () => {
 
         let curInputValue = waitingForNewValue ? '0' : curDisplay;
 
-        curInputValue += curInputValue.indexOf('.') < 0 ? '.' : '';
+        if (curInputValue.indexOf('.') < 0) {
+            curInputValue += '.';
+            setExpression(correctExpression(`${expression}.`));
+        }
 
         setCurDisplay(curInputValue);
         setWaitingForNewValue(false);
     };
 
     const handleOperator = async (operator: OperatorEnum) => {
-        if (newExp) return;
+        const op = TrigOperators.includes(operator || '') ? `${operator}(` : operator;
+
+        if (newExp) {
+            setNewExp(false);
+            setExpression(op);
+            return;
+        }
 
         if (isUndefinedOrNullOrEmpty(expression)) {
             setExpression(correctExpression(curDisplay, undefined));
         }
 
-        // const curDisp = waitingForNewValue ? '' : curDisplay;
-
-        const op = trigOperators.includes(operator || '') ? `${operator}(` : operator;
         setExpression(correctExpression(
             `${isUndefinedOrNullOrEmpty(op) ? expression : `${expression}${op}`}`,
         ));
@@ -88,6 +127,7 @@ const Dashboard: React.FC<IDashboardProps> = () => {
     };
 
     const handleEqual = async () => {
+        getResult();
     };
 
     const handleAllClear = () => {
@@ -102,12 +142,13 @@ const Dashboard: React.FC<IDashboardProps> = () => {
         if (!waitingForNewValue) {
             const newExpression = expression.slice(0, expression.length - 1);
             setExpression(newExpression);
-            // let newDisplay = curDisplay;
-            // newDisplay = newDisplay.slice(0, newDisplay.length - 1);
-            // if (newDisplay.length === 0) {
-            //     newDisplay = '0';
-            // }
-            // setCurDisplay(newDisplay);
+
+            let newDisplay = curDisplay;
+            newDisplay = newDisplay.slice(0, newDisplay.length - 1);
+            if (newDisplay.length === 0) {
+                newDisplay = '0';
+            }
+            setCurDisplay(newDisplay);
         }
     };
 
@@ -118,24 +159,29 @@ const Dashboard: React.FC<IDashboardProps> = () => {
 
     return (
         <div className="dashboard-wrapper">
+            {message && <div className="message-box">{message}</div>}
             <div className="calculator">
-                <DisplayPanel
-                    value={curDisplay}
-                    curOperator={waitingForNewValue ? curOperator : undefined}
-                    expression={expression}
-                    setExpression={onExpressionChange}
-                    setCurOperator={setCurOperator}
-                />
+                <div className="calculator-main">
+                    <DisplayPanel
+                        value={curDisplay}
+                        curOperator={waitingForNewValue ? curOperator : undefined}
+                        expression={expression}
+                        setExpression={onExpressionChange}
+                        setCurOperator={setCurOperator}
+                    />
 
-                <ButtonPanel
-                    onDigit={handleDigit}
-                    onDecimal={handleDecimal}
-                    onOperator={handleOperator}
-                    onEqual={handleEqual}
-                    onAllClear={handleAllClear}
-                    onErase={handleEraseOneUnit}
-                    onParenthesis={handleParenthesis}
-                />
+                    <ButtonPanel
+                        onDigit={handleDigit}
+                        onDecimal={handleDecimal}
+                        onOperator={handleOperator}
+                        onEqual={handleEqual}
+                        onAllClear={handleAllClear}
+                        onErase={handleEraseOneUnit}
+                        onParenthesis={handleParenthesis}
+                    />
+                </div>
+                <div className="history-panel">
+                </div>
             </div>
         </div>
     );
