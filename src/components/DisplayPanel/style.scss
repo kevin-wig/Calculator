@@ -1,0 +1,45 @@
+.display-pan {
+  padding: 1.5em;
+  background-color: #393939;
+  color: #fff;
+}
+
+.expression-wrapper {
+  min-height: 1em;
+  margin-bottom: 0.25em;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.8em;
+  line-height: 1;
+  text-align: right;
+  opacity: 0.4;
+}
+
+.expression-view {
+  width: 100%;
+  min-height: 40px;
+  max-height: 40px;
+  margin-left: 10px;
+  display: inline-block;
+  font-size: 18px;
+  text-align: right;
+  background-color: #393939;
+  border: none;
+  color: #fff;
+  transition: font-size 0.2s ease-out;
+}
+
+.memory-view {
+  font-size: 0.6em;
+}
+
+.current-value-view {
+  min-height: 44px;
+  max-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  font-size: 23px;
+  transition: font-size 0.2s ease-out;
+}

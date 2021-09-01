@@ -1,0 +1,79 @@
+.button-pan {
+  left: 0;
+  top: 40%;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  margin: 0;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  background-color: #fff;
+}
+
+.button {
+  width: 25%;
+  display: block;
+  flex: 1 1 25%;
+  font-size: 1.5rem;
+  background-color: #000;
+  border: 1px solid #272727;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.3s ease-out;
+  outline: none;
+
+  &:hover {
+    border: 1px solid #aaa;
+    background-color: #4f4f4f;
+  }
+
+  &:active {
+    background-color: #6f6f6f;
+    outline: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.operation-button {
+  @extend .button;
+
+  background-color: #171717;
+}
+
+.memory-button {
+  @extend .button;
+
+  flex: 1 1 calc(20% - 0.5rem);
+  font-size: 0.8em;
+  background-color: #444444;
+  border: none;
+  border-radius: 0;
+
+  &:hover {
+    border: none;
+    background-color: #656565;
+  }
+}
+
+.clear-button {
+  @extend .operation-button;
+
+  &:hover {
+    background-color: #a44;
+  }
+}
+
+.erase-button {
+  transform: rotate(-90deg);
+}
+
+.equal-button {
+  @extend .operation-button;
+
+  flex: 23 1 50%;
+}

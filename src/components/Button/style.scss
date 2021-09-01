@@ -1,0 +1,32 @@
+.button-style {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #525252;
+  border: none;
+  border-radius: 10px;
+  box-shadow: none;
+  opacity: 0.85;
+  outline: none;
+  cursor: pointer;
+  color: #000000;
+  user-select: none;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:disabled {
+    opacity: 0.65;
+  }
+}
+
+.text-wrapper {
+  margin: 0.5rem 0;
+  flex: 1 1;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
