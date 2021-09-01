@@ -31,9 +31,10 @@ const Dashboard: React.FC = () => {
     };
 
     const handleRandNumber = async () => {
-        const randNum = await loadRandomNumber();
-        setWaitingForNewValue(true);
-        handleDigit(+randNum);
+        if (waitingForNewValue) {
+            const randNum = await loadRandomNumber();
+            handleDigit(+randNum);
+        }
     };
 
     const getResult = () => {
