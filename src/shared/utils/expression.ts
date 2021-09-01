@@ -77,7 +77,11 @@ export const isValidExpression = (expression: string) => {
         });
     });
 
-    isValidOperators = !isOperator(expression[expression.length - 1]);
+    isValidOperators = isValidOperators && !isOperator(expression[expression.length - 1]);
+    isValidOperators = isValidOperators && ![
+        OperatorEnum.multiplication,
+        OperatorEnum.division,
+    ].includes(expression[0] as OperatorEnum);
 
     isValidOperators = formula.reduce((isValid: boolean, node, index): boolean => {
         if (TrigOperators.includes(node) && index > 0) {
