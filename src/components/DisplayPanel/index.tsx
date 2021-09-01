@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { OperatorEnum } from '../../shared/enums/operatorEnum';
 import { correctExpression, genProperExp, getValuableOperator, isUndefinedOrNullOrEmpty } from '../../shared/utils';
 
 import './style.scss';
-import { OperatorEnum } from '../../shared/enums/operatorEnum';
 
 interface IDisplayPanelProps {
     expression: string

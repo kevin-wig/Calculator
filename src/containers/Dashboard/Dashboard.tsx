@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-import DisplayPanel from '../../components/DisplayPanel';
 import ButtonPanel from '../../components/ButtonPanel';
+import DisplayPanel from '../../components/DisplayPanel';
+import { loadRandomNumber } from '../../services/random';
 import {
     calculate,
     correctExpression, genFormula,
@@ -14,7 +15,6 @@ import { OperatorEnum } from '../../shared/enums/operatorEnum';
 import { IExpressionResult } from '../../shared/interfaces/ExpressResult';
 
 import './style.scss';
-import { loadRandomNumber } from '../../services/random';
 
 const Dashboard: React.FC = () => {
     const [curDisplay, setCurDisplay] = useState<string>('0');
