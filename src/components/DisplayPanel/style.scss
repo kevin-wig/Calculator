@@ -1,15 +1,15 @@
 .display-pan {
-  padding: 1.5em;
+  padding: 1.5rem;
   background-color: #393939;
   color: #fff;
 }
 
 .expression-wrapper {
-  min-height: 1em;
-  margin-bottom: 0.25em;
+  min-height: 1rem;
+  margin-bottom: 0.25rem;
   display: flex;
   justify-content: space-between;
-  font-size: 1.8em;
+  font-size: 1.8rem;
   line-height: 1;
   text-align: right;
   opacity: 0.4;
@@ -29,10 +29,6 @@
   transition: font-size 0.2s ease-out;
 }
 
-.memory-view {
-  font-size: 0.6em;
-}
-
 .current-value-view {
   min-height: 44px;
   max-height: 44px;
@@ -42,4 +38,18 @@
   overflow: hidden;
   font-size: 23px;
   transition: font-size 0.2s ease-out;
+}
+
+@media screen and (max-width: 650px){
+  .display-pan {
+    padding: 1.2rem 0.5rem 1.2rem 0;
+  }
+
+  .expression-view {
+    font-size: 0.8rem;
+  }
+
+  .current-value-view {
+    font-size: 0.9rem;
+  }
 }

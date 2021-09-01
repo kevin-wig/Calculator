@@ -3,28 +3,37 @@ import React, { useState } from 'react';
 import DisplayPanel from '../../components/DisplayPanel';
 import ButtonPanel from '../../components/ButtonPanel';
 import {
-    correctExpression,
-    genProperExp,
+    calculate,
+    correctExpression, genFormula,
+    genProperExp, isNotNumber,
     isUndefinedOrNullOrEmpty,
     isValidExpression,
     TrigOperators,
 } from '../../shared/utils';
 import { OperatorEnum } from '../../shared/enums/operatorEnum';
+import { IExpressionResult } from '../../shared/interfaces/ExpressResult';
 
 import './style.scss';
+import { loadRandomNumber } from '../../services/random';
 
 const Dashboard: React.FC = () => {
     const [curDisplay, setCurDisplay] = useState<string>('0');
     const [curOperator, setCurOperator] = useState<OperatorEnum>();
-    const [result, setResult] = useState<number>(0);
     const [waitingForNewValue, setWaitingForNewValue] = useState<boolean>(true);
     const [expression, setExpression] = useState<string>('');
     const [message, setMessage] = useState<string>('');
     const [newExp, setNewExp] = useState(false);
+    const [history, setHistory] = useState<IExpressionResult[]>([]);
 
     const showMessage = (msg: string) => {
         setMessage(msg);
         setTimeout(setMessage, 8000);
+    };
+
+    const handleRandNumber = async () => {
+        const randNum = await loadRandomNumber();
+        setWaitingForNewValue(true);
+        handleDigit(+randNum);
     };
 
     const getResult = () => {
@@ -35,12 +44,37 @@ const Dashboard: React.FC = () => {
             && !isUndefinedOrNullOrEmpty(expression)
         ) {
             setMessage('');
-            return true;
+            const newRes = calculate(expression);
+            setHistory([
+                { formula: expression, result: newRes },
+                ...history.slice(0, 4),
+            ]);
+            setCurDisplay(newRes.toString());
+            setCurOperator(undefined);
+
+            const exp = correctExpression(`${
+                isUndefinedOrNullOrEmpty(expression)
+                    ? curDisplay
+                    : expression
+            }`);
+            setExpression(exp);
+
+            if (String(newRes).indexOf('e+') < 0) {
+                setCurDisplay(Number(Number(newRes)
+                    .toPrecision(16))
+                    .toString());
+            } else {
+                setCurDisplay(Number(newRes)
+                    .toExponential(10)
+                    .toString()
+                    .slice(0, 16));
+            }
+
+            setNewExp(true);
+            setWaitingForNewValue(true);
         } else if (validationMessage) {
             showMessage(validationMessage);
         }
-
-        return false;
     };
 
     const handleDigit = (digit: number) => {
@@ -84,7 +118,6 @@ const Dashboard: React.FC = () => {
 
         if (!isUndefinedOrNullOrEmpty(expression)) {
             setExpression(correctExpression(`${expression}${symbol}`));
-            setResult(0);
             setWaitingForNewValue(true);
         }
     };
@@ -121,34 +154,37 @@ const Dashboard: React.FC = () => {
         ));
 
         setCurDisplay('');
-        setResult(0);
         setCurOperator(operator);
         setWaitingForNewValue(true);
     };
 
-    const handleEqual = async () => {
-        getResult();
+    const handleEqual = () => {
+        if (history[0]?.formula !== expression) {
+            getResult();
+        }
     };
 
     const handleAllClear = () => {
         setCurDisplay('0');
         setExpression('');
         setCurOperator(undefined);
-        setResult(0);
         setWaitingForNewValue(true);
     };
 
     const handleEraseOneUnit = () => {
-        if (!waitingForNewValue) {
-            const newExpression = expression.slice(0, expression.length - 1);
-            setExpression(newExpression);
+        if (newExp) return;
 
-            let newDisplay = curDisplay;
-            newDisplay = newDisplay.slice(0, newDisplay.length - 1);
-            if (newDisplay.length === 0) {
-                newDisplay = '0';
-            }
+        const newExpression = expression.slice(0, expression.length - 1);
+        setExpression(newExpression);
+        const formula = genFormula(newExpression);
+
+        const newDisplay = formula[formula.length - 1] || '0';
+
+        if (isNotNumber(newDisplay)) {
+            setCurOperator(newDisplay as OperatorEnum);
+        } else {
             setCurDisplay(newDisplay);
+            setCurOperator(undefined);
         }
     };
 
@@ -171,6 +207,7 @@ const Dashboard: React.FC = () => {
                     />
 
                     <ButtonPanel
+                        onRandNumber={handleRandNumber}
                         onDigit={handleDigit}
                         onDecimal={handleDecimal}
                         onOperator={handleOperator}
@@ -181,6 +218,12 @@ const Dashboard: React.FC = () => {
                     />
                 </div>
                 <div className="history-panel">
+                    {history.map((expression, index) => (
+                        <div key={index}>
+                            <p className="expression">{genProperExp(expression.formula)}</p>
+                            <p className="result">{expression.result}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

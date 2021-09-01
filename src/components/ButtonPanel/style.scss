@@ -45,21 +45,6 @@
   background-color: #171717;
 }
 
-.memory-button {
-  @extend .button;
-
-  flex: 1 1 calc(20% - 0.5rem);
-  font-size: 0.8em;
-  background-color: #444444;
-  border: none;
-  border-radius: 0;
-
-  &:hover {
-    border: none;
-    background-color: #656565;
-  }
-}
-
 .clear-button {
   @extend .operation-button;
 
@@ -74,6 +59,4 @@
 
 .equal-button {
   @extend .operation-button;
-
-  flex: 23 1 50%;
 }

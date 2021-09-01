@@ -95,3 +95,18 @@ export const isValidExpression = (expression: string) => {
         return 'Wrong usage of parenthesis.';
     }
 };
+
+export const getValuableOperator = (operator: OperatorEnum) => {
+    if (TrigOperators.includes(operator)) {
+        switch (operator) {
+            case OperatorEnum.sin:
+                return 'sin';
+            case OperatorEnum.cos:
+                return 'cos';
+            case OperatorEnum.tan:
+                return 'tan';
+        }
+    }
+
+    return operator;
+};

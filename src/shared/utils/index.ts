@@ -1,5 +1,6 @@
 import { OperatorEnum } from '../enums/operatorEnum';
 
+export * from './caculation';
 export * from './expression';
 
 export const Operators: string[] = [
@@ -29,3 +30,15 @@ export const isNotNumber = (input: string): boolean => {
 export const isNumber = (input: string): boolean => {
     return !isNotNumber(input);
 };
+
+export function getPriority(input: string) {
+    if (input === '+' || input === '-') {
+        return 1;
+    } else if (input === '*' || input === '/') {
+        return 2;
+    } else if (TrigOperators.includes(input)) {
+        return 3;
+    }
+
+    return 0;
+}

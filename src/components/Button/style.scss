@@ -30,3 +30,13 @@
   font-size: 1.6rem;
   font-weight: 500;
 }
+
+@media screen and (max-width: 650px){
+  .button-style {
+    padding: 0.3rem 0.5rem;
+  }
+
+  .text-wrapper {
+    font-size: 0.9rem;
+  }
+}

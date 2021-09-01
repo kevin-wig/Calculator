@@ -1,4 +1,4 @@
-export interface IExpressResult {
+export interface IExpressionResult {
     formula: string;
     result: number;
 }

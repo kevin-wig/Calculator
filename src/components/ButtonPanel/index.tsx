@@ -6,24 +6,26 @@ import { Button } from '../Button';
 import './style.scss';
 
 interface IButtonPanelProps {
-    onDigit: (digit: number) => void;
-    onDecimal: () => void;
-    onOperator: (operator: OperatorEnum) => void;
-    onEqual: () => void;
     onAllClear: () => void;
+    onDecimal: () => void;
+    onDigit: (digit: number) => void;
     onErase: () => void;
+    onEqual: () => void;
+    onOperator: (operator: OperatorEnum) => void;
     onParenthesis: (symbol: '(' | ')') => void;
+    onRandNumber: () => void;
 }
 
 const ButtonPanel: React.FC<IButtonPanelProps> = (props) => {
     const {
-        onDigit,
-        onDecimal,
-        onOperator,
-        onEqual,
         onAllClear,
+        onDecimal,
+        onDigit,
         onErase,
+        onEqual,
+        onOperator,
         onParenthesis,
+        onRandNumber,
     } = props;
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -118,6 +120,11 @@ const ButtonPanel: React.FC<IButtonPanelProps> = (props) => {
                 className="operation-button"
                 text="."
                 onClick={onDecimal}
+            />
+            <Button
+                className="button"
+                text="Rand"
+                onClick={onRandNumber}
             />
             <Button
                 className="equal-button"

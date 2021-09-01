@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { correctExpression, genProperExp, isUndefinedOrNullOrEmpty } from '../../shared/utils';
+import { correctExpression, genProperExp, getValuableOperator, isUndefinedOrNullOrEmpty } from '../../shared/utils';
 
 import './style.scss';
 import { OperatorEnum } from '../../shared/enums/operatorEnum';
@@ -8,7 +8,7 @@ import { OperatorEnum } from '../../shared/enums/operatorEnum';
 interface IDisplayPanelProps {
     expression: string
     value: string
-    curOperator?: string
+    curOperator?: OperatorEnum;
     setExpression: (exp: string, setCurOperator: (op: OperatorEnum) => void) => void;
     setCurOperator: (operator: OperatorEnum) => void;
 }
@@ -30,7 +30,7 @@ const DisplayPanel: React.FC<IDisplayPanelProps> = (props) => {
             </div>
 
             <div className="current-value-view">
-                {isUndefinedOrNullOrEmpty(curOperator) ? `${value}` : `${curOperator || ''}`}
+                {isUndefinedOrNullOrEmpty(curOperator) ? value : curOperator ? getValuableOperator(curOperator) : ''}
             </div>
         </div>
     );

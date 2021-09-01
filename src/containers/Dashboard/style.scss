@@ -62,3 +62,9 @@
   background-color: #525252;
   color: #ff7f7d;
 }
+
+@media screen and (max-width: 650px){
+  .calculator {
+    max-height: 450px;
+  }
+}
