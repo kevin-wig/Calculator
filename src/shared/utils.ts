@@ -44,9 +44,9 @@ export const isNotNumber = (input: string): boolean => {
     return input === '(' || input === ')' || input === '+' || input === '-' || input === '×' || input === '÷' || input === '%';
 };
 
-export function isNumber(input: string): boolean {
+export const isNumber = (input: string): boolean => {
     return !isNotNumber(input);
-}
+};
 
 export const genProperExp = (expression: string): string => {
     return expression
