@@ -31,8 +31,34 @@ const ButtonPanel: React.FC<IButtonPanelProps> = (props) => {
     const handleKeyDown = (event: KeyboardEvent) => {
         const { keyCode, shiftKey } = event;
 
-        if (keyCode === 13 || (keyCode === 187 && !shiftKey)) {
+        if (keyCode === 57 && shiftKey) {
+            onParenthesis('(');
+        } else if (keyCode === 48 && shiftKey) {
+            onParenthesis(')');
+        } else if (keyCode >= 48 && keyCode <= 57 && !shiftKey) {
+            onDigit(keyCode - 48)
+        } else if ((keyCode >= 96 && keyCode <= 105)) {
+            onDigit(keyCode - 96)
+        } else if (keyCode === 107 || (keyCode === 187 && shiftKey)) {
+            onOperator(OperatorEnum.addition);
+        } else if (keyCode === 109 || keyCode === 189) {
+            onOperator(OperatorEnum.subtraction);
+        } else if (keyCode === 106 || (keyCode === 56 && shiftKey)) {
+            onOperator(OperatorEnum.multiplication);
+        } else if (keyCode === 111 || keyCode === 191) {
+            onOperator(OperatorEnum.division);
+        } else if (keyCode === 83) { // on key s
+            onOperator(OperatorEnum.sin);
+        } else if (keyCode === 67) { // on key c
+            onOperator(OperatorEnum.cos);
+        } else if (keyCode === 84) { // on key t
+            onOperator(OperatorEnum.tan);
+        } else if (keyCode === 13 || (keyCode === 187 && !shiftKey)) {
             onEqual();
+        } else if (keyCode === 46 || keyCode === 27) { // on ESC or Delete
+            onAllClear();
+        } else if (keyCode === 8) { // on Backspace
+            onErase();
         }
     };
 

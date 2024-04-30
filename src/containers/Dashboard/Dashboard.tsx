@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ButtonPanel from '../../components/ButtonPanel';
 import DisplayPanel from '../../components/DisplayPanel';
@@ -25,9 +25,18 @@ const Dashboard: React.FC = () => {
     const [newExp, setNewExp] = useState(false);
     const [history, setHistory] = useState<IExpressionResult[]>([]);
 
+    useEffect(() => {
+        const validationMessage = isValidExpression(expression);
+        if (validationMessage) {
+            showMessage(validationMessage);
+        } else {
+            showMessage('');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [expression]);
+
     const showMessage = (msg: string) => {
         setMessage(msg);
-        setTimeout(setMessage, 8000);
     };
 
     const handleRandNumber = async () => {

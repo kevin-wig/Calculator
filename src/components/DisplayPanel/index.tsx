@@ -26,6 +26,7 @@ const DisplayPanel: React.FC<IDisplayPanelProps> = (props) => {
                        setExpression(correctExpression(String(e.target.value)), setCurOperator);
                     }}
                     value={genProperExp(expression)}
+                    readOnly
                 />
             </div>
 
